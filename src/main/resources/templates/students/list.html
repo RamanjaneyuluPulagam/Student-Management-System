@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Student List</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<h2>Student List</h2>
+
+<form method="get" th:action="@{/students}">
+    <input type="text" name="searchName" placeholder="Search by Name" th:value="${searchName}" />
+    <input type="text" name="filterClass" placeholder="Filter by Class" th:value="${filterClass}" />
+    <button type="submit">Search/Filter</button>
+    <a th:href="@{/students}">Clear</a>
+</form>
+
+<a th:href="@{/students/add}">Add New Student</a>
+
+<table border="1" cellpadding="10" cellspacing="0">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Class</th>
+        <th>Email</th>
+        <th>Address</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="student : ${students}">
+        <td th:text="${student.name}"></td>
+        <td th:text="${student.age}"></td>
+        <td th:text="${student.studentClass}"></td>
+        <td th:text="${student.email}"></td>
+        <td th:text="${student.address}"></td>
+        <td>
+            <a th:href="@{'/students/edit/' + ${student.studentId}}">Edit</a> |
+            <a th:href="@{'/students/delete/' + ${student.studentId}}" 
+               onclick="return confirm('Are you sure?');">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div>
+    <span>Page: <span th:text="${currentPage + 1}"></span> / <span th:text="${totalPages}"></span></span>
+    <div>
+        <ul>
+            <li th:if="${currentPage > 0}">
+                <a th:href="@{|/students?page=${currentPage - 1}|}">Previous</a>
+            </li>
+            <li th:if="${currentPage + 1 < totalPages}">
+                <a th:href="@{|/students?page=${currentPage + 1}|}">Next</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>
